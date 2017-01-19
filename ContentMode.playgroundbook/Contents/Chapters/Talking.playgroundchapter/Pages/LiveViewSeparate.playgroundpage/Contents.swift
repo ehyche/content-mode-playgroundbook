@@ -6,13 +6,63 @@
 
  */
 
+import UIKit
 import PlaygroundSupport
 
-func say(_ message: String) {
-    let page = PlaygroundPage.current
-    if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
-        proxy.send(.string(message))
+class ContentModeViewControllerProxy : NSObject {
+
+    var imageContentMode: UIViewContentMode = .scaleAspectFit {
+        didSet {
+            sendContentMode()
+        }
     }
+
+    var imageName: String = "tall.jpg" {
+        didSet {
+            sendImageName()
+        }
+    }
+
+    var imageClips: Bool = false {
+        didSet {
+            sendImageClips()
+        }
+    }
+
+    private func sendMessageToProxy(messageValue: PlaygroundValue) {
+        if let proxy = PlaygroundPage.current.liveView as? PlaygroundRemoteLiveViewProxy {
+            proxy.send(messageValue)
+        }
+    }
+
+    private func sendContentMode() {
+        let contentModeValue = PlaygroundValue.integer(imageContentMode.rawValue)
+        let contentModeDictionary = ["contentMode": contentModeValue]
+        let contentModePlaygroundValue = PlaygroundValue.dictionary(contentModeDictionary)
+        sendMessageToProxy(messageValue: contentModePlaygroundValue)
+    }
+
+    private func sendImageName() {
+        let contentModeValue = PlaygroundValue.string(imageName)
+        let contentModeDictionary = ["imageName": contentModeValue]
+        let contentModePlaygroundValue = PlaygroundValue.dictionary(contentModeDictionary)
+        sendMessageToProxy(messageValue: contentModePlaygroundValue)
+    }
+
+    private func sendImageClips() {
+        let contentModeValue = PlaygroundValue.boolean(imageClips)
+        let contentModeDictionary = ["clips": contentModeValue]
+        let contentModePlaygroundValue = PlaygroundValue.dictionary(contentModeDictionary)
+        sendMessageToProxy(messageValue: contentModePlaygroundValue)
+    }
+
 }
 
-say(/*#-editable-code */"<#Knock, knock!#>"/*#-end-editable-code*/)
+let controllerProxy = ContentModeViewControllerProxy()
+
+controllerProxy.imageName = /*#-editable-code*/"tall.jpg"/*#-end-editable-code*/
+
+controllerProxy.imageContentMode = /*#-editable-code*/.scaleToFill/*#-end-editable-code*/
+
+controllerProxy.imageClips = /*#-editable-code*/false/*#-end-editable-code*/
+

@@ -259,6 +259,9 @@ public class ContentModeViewController: UIViewController, PlaygroundLiveViewSafe
         if case let .string(text)? = dictionary["imageName"] {
             self.imageName = text
         }
+        if case let .boolean(clips)? = dictionary["clips"] {
+            self.imageClips = clips
+        }
     }
 
     public func stringForContentMode(mode: UIViewContentMode) -> String {
